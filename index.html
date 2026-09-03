@@ -1,0 +1,39 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hours & Pay Tracker</title>
+</head>
+<body>
+    <h2>Shift Tracker & Monthly Summary</h2>
+
+    <form method="POST" action="/calculate">
+        <label for="wage">Pay per Hour ($):</label>
+        <input type="number" step="0.01" id="wage" name="wage" value="{{ session.get('wage', 15.00) }}" required><br><br>
+
+        <label for="start_time">Start Time:</label>
+        <input type="time" id="start_time" name="start_time" required>
+        
+        <label for="end_time">End Time:</label>
+        <input type="time" id="end_time" name="end_time" required>
+        
+        <button type="submit">Add Shift</button>
+    </form>
+
+    <form method="POST" action="/reset" style="margin-top: 10px;">
+        <button type="submit" style="color: red;">Reset Month</button>
+    </form>
+
+    {% if last_shift_hours is not none %}
+        <hr>
+        <h3>Latest Shift Result</h3>
+        <p>Hours: {{ "%.2f"|format(last_shift_hours) }} | Money: ${{ "%.2f"|format(last_shift_money) }}</p>
+    {% endif %}
+
+    <hr>
+    <h3>Month-to-Date Total</h3>
+    <p>Total Hours: {{ "%.2f"|format(session.get('total_hours', 0)) }}</p>
+    <p>Total Earned: ${{ "%.2f"|format(session.get('total_money', 0)) }}</p>
+</body>
+</html>
